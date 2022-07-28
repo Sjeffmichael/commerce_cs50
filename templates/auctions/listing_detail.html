@@ -1,0 +1,99 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}   
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-8">
+                <div class="contianer">
+                    <div class="row">
+                        <div class="col">
+                            <h1>{{ details.title_listing }}</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col">
+                            <img src="{{ details.listing_image.url }}" class="img-thumbnail" width="500" height="500" alt=""> 
+        
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <h4>Details:</h4>
+
+                            </div>
+                            <div class="row">
+                                <ul>
+                                    <li>
+                                        <h6>
+                                            Price: ${{ details.initial_bid }}
+                                        </h6>
+                                    </li>
+                                    <li>
+                                        <h6>Listed by: {{ details.user }}</h6>
+                                    </li>
+                                    <li>
+                                        <h6>Category: {{ details.category }}</h6>
+                                    </li>
+                                    
+                                </ul>
+
+                            </div>
+                            <div class="row">
+                                <form action="" method="post">
+                                    <button type="submit" class="btn btn-danger btn-sm shadow-none" type="button">Close listing</button>
+                                </form>
+                                <form action="{% url 'auctions:add_to_watchlist' %}" method="post">
+                                    <input type="hidden" name="listing" value="{{ details.id }}"/>
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm shadow-none" type="button">Add to watchlist</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <form action="" method="post" class="bg-light p-2">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm shadow-none">Place Bid</button>
+                </form>
+            </div>
+            
+            <div class="col-md-8">
+                <hr>
+                <h4>Comment Section:</h4>
+                <div class="d-flex flex-column comment-section">
+                    <div class="bg-light p-2">
+                        <form action="{% url 'auctions:create_comment'%}" method="post">
+                            <div class="d-flex flex-row align-items-start">
+                                <!-- <img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40"> -->
+                                <textarea class="form-control ml-1 shadow-none textarea" name="comment" placeholder="Add comment"></textarea>
+                                <input type="hidden" name="listing" value="{{ details.id }}"/>
+                                <!-- <input type="hidden" name="listing" value='{{ details.id }}'/> -->
+                            </div>
+
+                            <div class="mt-2 text-right">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-sm shadow-none" type="button">Post comment</button>
+                                <!-- <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button>-->
+                            </div> 
+                        </form>
+                    </div>
+                    {% for comment in comments %}
+                        <div class="bg-white p-2">
+                            <div class="d-flex flex-row user-info">
+                                <img class="rounded-circle" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" width="40" height="40">
+                                <div class="d-flex flex-column justify-content-start ml-2">
+                                    <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
+                                    <span class="date text-black-50">Shared publicly - {{ comment.creation_date }}</span></div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="comment-text">{{ comment.comment }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

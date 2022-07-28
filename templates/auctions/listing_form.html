@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row  vh-90 justify-content-center align-items-center">
+            <div class="col-auto bg-light p-5">
+                <h4>New Listing</h4>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm shadow-none">Add Listing</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+    
